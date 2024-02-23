@@ -43,3 +43,12 @@ SYSCALL_DEFINE0(stop_elevator)
     else
         return -ENOSYS;
 }
+ arch/x86/kvm/vmx/vmenter.o
+  AS [M]  arch/x86/kvm/svm/vmenter.o
+  LD [M]  arch/x86/kvm/kvm.o
+  LD [M]  arch/x86/kvm/kvm-amd.o
+  LD [M]  arch/x86/kvm/kvm-intel.o
+  CC [M]  kernel/kheaders.o
+make[1]: *** [/usr/src/linux-6.7.5/Makefile:1911: .] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
+
