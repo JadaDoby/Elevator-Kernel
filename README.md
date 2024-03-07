@@ -38,7 +38,6 @@ This project's structure ensures a seamless progression, with each part building
   
 
 ## File Listing
-...
 elevator/
 ├── Makefile
 ├── part1/
@@ -50,8 +49,8 @@ elevator/
 ├── part2/
 │   ├── src/
 │   │   ├── my_timer.c
-│   │   └── Makefile
 │   │   ├── my_timer.h
+│   │   └── Makefile
 │   └── Makefile
 ├── part3/
 │   ├── src/
@@ -62,6 +61,7 @@ elevator/
 │   └── syscalls.c
 ├── Makefile
 └── README.md
+
 
 ## How to Compile & Execute
 
