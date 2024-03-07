@@ -3,21 +3,6 @@
 
 [This project is designed to provide hands-on experience and understanding in system calls, kernel programming, concurrency, synchronization, and elevator scheduling algorithms. Divided into three parts, it progressively builds skills.
 
-**Part 1: System Calls Integration**
-- Introduces system calls and their integration into a C program.
-- Uses "strace" tool for verification, laying the foundation for kernel interaction.
-
-**Part 2: Kernel Programming**
-- Develops a kernel module, "my_timer," utilizing timekeeping functions.
-- Creates a proc entry for reading current time, deepening knowledge of kernel modules and proc interfaces.
-
-**Part 3: Elevator Scheduling**
-- Implements a scheduling algorithm for a dorm elevator in a kernel module.
-- Handles concurrency, synchronization, and efficient scheduling.
-- Challenges participants with a practical, advanced kernel programming task.
-
-This project's structure ensures a seamless progression, with each part building on the knowledge gained in the previous sections. Participants gain practical skills in system calls, kernel programming, and key concepts crucial for developing robust software systems, particularly in operating systems and low-level programming domains.]
-
 ## Group Members
 - **[Jada Doby]**: [jdd20a@fsu.edu]
 - **[Shelley Bercy]**: [sb22bg@fsu.edu]
