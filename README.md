@@ -31,9 +31,26 @@ This project's structure ensures a seamless progression, with each part building
 ### Part 2: [Timer Kernel Module]
 - **Responsibilities**: [Create a Unix kernel module, "my_timer," utilizing ktime_get_real_ts64() to capture and store the current time. The module, when loaded, establishes a "/proc/timer" entry for displaying both the current time and elapsed time since the last call.]
 - **Assigned to**: [Shelley Bercy, Rood Vilmont]
-### Part 3: [Elevator Module]
-- **Responsibilities**: [In this task, you are instructed to implement a scheduling algorithm for an office elevator using a kernel module named "elevator." The elevator can hold up to 5 passengers with a maximum weight of 7 lbs, and each worker is randomly assigned as a part-time worker, lawyer, boss, or visitor, each with specific weights. The task involves adding three system calls (start_elevator, issue_request, stop_elevator) to control the elevator and create passengers, and then compiling and installing the modified kernel. Finally, testing the added system calls is performed using provided test scripts to ensure successful implementation.]
-- **Assigned to**: [Jada Doby,Shelley Bercy, Rood Vilmont]
+### Part 3a: [Adding System Calls]
+- **Responsibilities**: [Prepare kernel for compilation, modify kernel files and define system calls]
+- **Assigned to**: [Jada Doby, Shelley Bercy]
+  ### Part 3b: [Kernel Compilation]
+- **Responsibilities**: [ Compile the kernel with the system calls and check if it installed]
+- **Assigned to**: [Rood Vilmont, Shelley Bercy]
+  ### Part 3c: [Threads]
+- **Responsibilities**: [ Utilize threads to control the elevator movement]
+- **Assigned to**: [Jada Doby, Rood Vilmont]
+  ### Part 3d: [Linked List]
+- **Responsibilities**: [ Utilize a linked list to handle the passengers per floor/elevator]
+- **Assigned to**: [Jada Doby, Shelley Bercy]
+   ### Part 3e: [Mutexes]
+- **Responsibilities**: [ Utilize a mutez to control the shared data access between floors and elevators]
+- **Assigned to**: [ Shelley Bercy, Rood Vilmont, Jada Doby]
+   ### Part 3f: [Scheduling Algorithm]
+- **Responsibilities**: [ Develop the algorithm and use kmalloc to allocate the dynamic memory for the passengers]
+- **Assigned to**: [Shelley Bercy, Rood Vilmont, Jada Doby ]
+  
+
 
   
 
@@ -68,7 +85,7 @@ elevator/
 
 ### Requirements
 - **Compiler**:`gcc` for C/C++
-- **Dependencies**:<linux/kernel.h>, <linux/string.h>, <linux/proc_fs.h>, <linux/uaccess.h>, <linux/slab.h>, <linux/module.h>, <linux/init.h>, <linux/kthread.h> <linux/mutex.h>, <linux/list.h>, <linux/delay.h>,and <linux/linkage.h>.
+- **Dependencies**: <linux/kernel.h>, <linux/string.h>, <linux/proc_fs.h>, <linux/uaccess.h>, <linux/slab.h>, <linux/module.h>, <linux/init.h>, <linux/kthread.h> <linux/mutex.h>, <linux/list.h>, <linux/delay.h>,and <linux/linkage.h>.
 
 ### Compilation
 For a C/C++ example:
