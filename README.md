@@ -1,7 +1,7 @@
 # Group18_P2
 # [Elevator]
 
-[This project is designed to provide hands-on experience and understanding in system calls, kernel programming, concurrency, synchronization, and elevator scheduling algorithms. Divided into three parts, it progressively builds skills.
+[This project is designed to provide hands-on experience and understanding in system calls, kernel programming, concurrency, synchronization, and elevator scheduling algorithms. Divided into three parts, it progressively builds skills.]
 
 ## Group Members
 - **[Jada Doby]**: [jdd20a@fsu.edu]
