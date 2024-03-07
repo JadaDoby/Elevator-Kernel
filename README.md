@@ -1,5 +1,5 @@
 # Group18_P2
-# [Project Name]
+# [Elevator]
 
 [This project is designed to provide hands-on experience and understanding in system calls, kernel programming, concurrency, synchronization, and elevator scheduling algorithms. Divided into three parts, it progressively builds skills.
 
