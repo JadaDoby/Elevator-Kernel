@@ -33,7 +33,7 @@ enum PassengerType
     VISITOR,
 };
 const char *passType[] = {"PART_TIME", "LAWYER", "BOSS", "VISITOR"};
-static const int passenger_weights[4] = {10, 15, 20, 5}; 
+static const int passenger_weights[4] = {10, 15, 20, 5};
 
 enum ElevatorState
 {
@@ -86,8 +86,8 @@ static int issue_request(int start_floor, int destination_floor, int type);
 static int stop_elevator(void);
 static int movement(int cfloor, int dfloor);
 static int process_passenger(struct Passenger *passenger);
-static int loading(void);   
-static int unloading(void); 
+static int loading(void);
+static int unloading(void);
 
 // Important structs
 static struct Elevator elevator;
@@ -112,7 +112,7 @@ int start_elevator(void)
         elevator.current_weight = 0;
         elevator.passenger_count = 0;
         elevator.running = 1;
-        elevator.stopped = 0; 
+        elevator.stopped = 0;
     }
 
     mutex_unlock(&elevator.lock);
@@ -121,7 +121,6 @@ int start_elevator(void)
 
 int issue_request(int start_floor, int destination_floor, int type)
 {
-   
 
     if (type < PART_TIME || type > VISITOR || start_floor < 1 || start_floor > 5 || destination_floor < 1 ||
         destination_floor > 5)
@@ -129,8 +128,7 @@ int issue_request(int start_floor, int destination_floor, int type)
         return -EINVAL;
     }
 
-    int weight = passenger_weights[type]; 
-  
+    int weight = passenger_weights[type];
 
     mutex_lock(&floors[start_floor - 1].lock); // Correct floor indexing
 
@@ -147,31 +145,21 @@ int issue_request(int start_floor, int destination_floor, int type)
     new_passenger->destination_floor = destination_floor;
     INIT_LIST_HEAD(&new_passenger->struct_lister);
     list_add_tail(&new_passenger->struct_lister, &floors[start_floor - 1].passengers); // Add to the correct floor
-
+    wait++; // Increment waiting counter
     mutex_unlock(&floors[start_floor - 1].lock);
 
     return 0;
 }
 
-bool check_for_waiting_passengers(void)
-{
-    for (int i = 0; i < MAX_FLOOR; i++)
-    {
-        if (!list_empty(&floors[i].passengers))
-        {
-            return true;
-        }
-    }
-    return false; // No passengers waiting on any floor
-}
+
 
 static int movement(int cfloor, int dfloor)
 {
-   
+
     int new_floor;
     if (cfloor == dfloor)
     {
-        elevator.status = IDLE;  
+        elevator.status = IDLE;
         return dfloor;
     }
     else if (cfloor < dfloor)
@@ -184,7 +172,7 @@ static int movement(int cfloor, int dfloor)
         elevator.status = DOWN;
         new_floor = cfloor - 1;
     }
-    msleep(2000); // Simulate movement delay
+    msleep(2000);     // Simulate movement delay
     return new_floor; // Return the new floor after movement
 }
 
@@ -207,6 +195,8 @@ static int loading(void)
                 list_move_tail(temp, &elevator.passengers);
                 elevator.current_weight += passenger_weight;
                 elevator.passenger_count++;
+                wait--;
+                if(wait < 0){ wait = 0;}
             }
             else
             {
@@ -247,20 +237,20 @@ static int unloading(void)
 
 int elevator_thread_fn(void *data)
 {
-   
+
     while (!kthread_should_stop())
-    { 
+    {
         if (elevator.running == 1 && elevator.status != OFFLINE)
         {
-          
+
             // Simulate elevator moving up and down between floors
             for (elevator.current_floor = MIN_FLOOR; elevator.current_floor <= MAX_FLOOR; elevator.current_floor++)
             {
                 mutex_lock(&elevator.lock);
                 elevator.status = LOADING; // Set the status to LOADING when at a floor
                 mutex_unlock(&elevator.lock);
-                loading();   // Load passengers at the current floor
-                unloading(); // Unload passengers at the current floor
+                loading();    // Load passengers at the current floor
+                unloading();  // Unload passengers at the current floor
                 msleep(1000); // Sleep to simulate the time taken to move between floors
 
                 // Update the status to moving (UP or DOWN) after loading/unloading
@@ -280,8 +270,8 @@ int elevator_thread_fn(void *data)
                 elevator.status = LOADING; // Set the status to LOADING when at a floor
                 mutex_unlock(&elevator.lock);
 
-                loading();   // Load passengers at the current floor
-                unloading(); // Unload passengers at the current floor
+                loading();    // Load passengers at the current floor
+                unloading();  // Unload passengers at the current floor
                 msleep(1000); // Sleep to simulate the time taken to move between floors
 
                 if (elevator.current_floor > MIN_FLOOR)
@@ -294,7 +284,7 @@ int elevator_thread_fn(void *data)
                 msleep(2000); // Sleep to simulate the time taken to move between floors
             }
         }
-        else if (elevator.stopped == 1 && list_empty(&elevator.passengers) && !check_for_waiting_passengers())
+        else if (elevator.stopped == 1 && list_empty(&elevator.passengers) && wait == 0)
         {
             // If the elevator is stopping, and there are no passengers left, it goes offline
             mutex_lock(&elevator.lock);
@@ -304,7 +294,7 @@ int elevator_thread_fn(void *data)
         }
 
         // Check if there are any passengers waiting or on the elevator before deciding on further action
-        if (list_empty(&elevator.passengers) && !check_for_waiting_passengers())
+        if (list_empty(&elevator.passengers) && wait == 0)
         {
             // If there are no passengers waiting or on the elevator, set the status to IDLE
             mutex_lock(&elevator.lock);
@@ -361,7 +351,6 @@ static ssize_t elevator_read(struct file *file, char __user *ubuf, size_t count,
     ssize_t ret;
     struct Passenger *pass;
 
-
     // Elevator state descriptions
     len += snprintf(buf + len, PROC_BUF_SIZE - len, "Elevator state: %s\n", status_str[elevator.status]);
 
@@ -395,7 +384,6 @@ static ssize_t elevator_read(struct file *file, char __user *ubuf, size_t count,
     len += snprintf(buf + len, PROC_BUF_SIZE - len, "Number of passengers waiting: %d\n", wait);
     len += snprintf(buf + len, PROC_BUF_SIZE - len, "Number of passengers serviced: %d\n", helped);
 
-
     ret = simple_read_from_buffer(ubuf, count, ppos, buf, len);
 
     return ret;
@@ -415,6 +403,8 @@ static int __init elevator_init(void)
     elevator.current_floor = 1; // Assuming ground floor is 1
     elevator.current_weight = 0;
     elevator.passenger_count = 0;
+    wait = 0;
+    helped = 0;
     elevator.status = OFFLINE;
     elevator.target_floor = 2; // Set initial target floor
     mutex_init(&elevator.lock);
@@ -494,7 +484,6 @@ static void __exit elevator_exit(void)
     {
         proc_remove(elevator_entry);
     }
-
 }
 
 module_init(elevator_init);
