@@ -373,7 +373,24 @@ static ssize_t elevator_read(struct file *file, char __user *ubuf, size_t count,
         len += snprintf(buf + len, PROC_BUF_SIZE - len, "[%c] Floor %d: ", (i + 1 == elevator.current_floor) ? '*' : ' ', i + 1);
         list_for_each_entry(pass, &floors[i].passengers, struct_lister)
         {
-            char typeChar = 'A' + pass->type; // Assuming enum PassengerType starts at 0
+            char typeChar;
+            switch (pass->type)
+            {
+            case PART_TIME:
+                typeChar = 'P';
+                break;
+            case LAWYER:
+                typeChar = 'L';
+                break;
+            case BOSS:
+                typeChar = 'B';
+                break;
+            case VISITOR:
+                typeChar = 'V';
+                break;
+            default:
+                break;
+            }
             len += snprintf(buf + len, PROC_BUF_SIZE - len, "%c%d ", typeChar, pass->destination_floor);
         }
         len += snprintf(buf + len, PROC_BUF_SIZE - len, "\n");
