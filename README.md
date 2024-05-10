@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Group18_P2
 # [Elevator]
 
@@ -96,3 +97,6 @@ This will build the executable in ...
 
 ## Considerations
 [Description]
+=======
+# Elevator-Kernel
+>>>>>>> 1469b2d1afd68866456d073e5a252e0b0add6e10
